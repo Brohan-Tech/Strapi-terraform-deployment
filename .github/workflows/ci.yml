@@ -36,12 +36,14 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
 
-      - name: Upload Image Tag
-        run: echo "${{ steps.tag.outputs.tag }}" > tag.txt
+      - name: Save tag to file
+        run: |
+          mkdir -p artifacts
+          echo "${{ steps.tag.outputs.tag }}" > artifacts/tag.txt
 
-      - name: Save tag as artifact
+      - name: Upload Image Tag Artifact
         uses: actions/upload-artifact@v4
         with:
           name: image-tag
-          path: tag.txt
+          path: artifacts
 
