@@ -11,36 +11,31 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Download the image-tag artifact from the latest successful CI run
       - name: Get latest artifact from CI workflow
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: ci.yml
           workflow_conclusion: success
           name: image-tag
-          path: ./image-tag-artifact
+          path: ./tag
 
       - name: Read Docker Tag
-        id: read_tag
+        id: tag
         run: |
-          TAG=$(cat ./image-tag-artifact/tag.txt)
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "Docker image tag: $TAG"
+          TAG=$(cat ./tag/tag.txt)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=Terraform-2 init
+        run: terraform init
 
       - name: Terraform Plan
-        run: terraform -chdir=Terraform-2 plan -var="docker_image_tag=${{ env.TAG }}"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform plan -var="docker_image_tag=${{ steps.tag.outputs.tag }}"
 
       - name: Terraform Apply
-        run: terraform -chdir=Terraform-2 apply -auto-approve -var="docker_image_tag=${{ env.TAG }}"
+        run: terraform apply -auto-approve -var="docker_image_tag=${{ steps.tag.outputs.tag }}"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
