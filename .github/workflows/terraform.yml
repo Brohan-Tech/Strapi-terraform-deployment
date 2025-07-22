@@ -15,9 +15,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Download Docker Image Tag
-        uses: actions/download-artifact@v4
+      - name: Get latest artifact from CI workflow
+        uses: dawidd6/action-download-artifact@v3
         with:
+          workflow: ci.yml
+          workflow_conclusion: success
           name: image-tag
           path: ./tag
 
