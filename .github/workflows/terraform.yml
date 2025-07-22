@@ -9,7 +9,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: terraform2
+        working-directory: Terraform-2
 
     steps:
       - name: Checkout Code
