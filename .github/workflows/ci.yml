@@ -32,7 +32,7 @@ jobs:
       - name: Build & Push Image
         uses: docker/build-push-action@v5
         with:
-          context: ./Terraform-2/my-strapi-project
+          context: ./my-strapi-project
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
 
