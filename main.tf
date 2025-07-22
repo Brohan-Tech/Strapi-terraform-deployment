@@ -14,8 +14,9 @@ data "aws_ami" "ubuntu_jammy" {
 }
 
 provider "aws" {
-  region = var.aws_region
-  # Access and secret keys should be provided via GitHub Secrets or terraform.tfvars for local
+  region     = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
 resource "aws_security_group" "strapi_sg" {

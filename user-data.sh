@@ -13,7 +13,7 @@ systemctl start docker
 systemctl enable docker
 
 echo ">>> Pulling Strapi Docker image"
-docker pull brohan9/strapi-app:${docker_tag}
+docker pull brohan9/strapi-app=${docker_tag}
 
 echo ">>> Removing old Strapi container if exists"
 docker rm -f strapi || true
@@ -23,7 +23,7 @@ docker run -d \
   --name strapi \
   -p 1337:1337 \
   --restart unless-stopped \
-  brohan9/strapi-app:${docker_tag}
+  brohan9/strapi-app=${docker_tag}
 
 echo ">>> Done setting up Strapi"
 
