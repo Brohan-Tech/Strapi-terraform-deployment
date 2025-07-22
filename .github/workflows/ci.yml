@@ -32,18 +32,16 @@ jobs:
       - name: Build & Push Image
         uses: docker/build-push-action@v5
         with:
-          context: my-strapi-project
+          context: Terraform-2/my-strapi-project
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
 
-      - name: Save tag to file
-        run: |
-          mkdir -p artifacts
-          echo "${{ steps.tag.outputs.tag }}" > artifacts/tag.txt
+      - name: Write tag file
+        run: echo "${{ steps.tag.outputs.tag }}" > tag.txt
 
       - name: Upload Image Tag Artifact
         uses: actions/upload-artifact@v4
         with:
           name: image-tag
-          path: artifacts
+          path: tag.txt
 
